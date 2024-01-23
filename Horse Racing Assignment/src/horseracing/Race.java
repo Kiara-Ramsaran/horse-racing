@@ -117,18 +117,16 @@ public class Race {
 
     private int getIncrementForHorse(Horse horse) {
 
-        // horse.getDirtRating()
-        // horse.getMudRating()
-        // horse.getPreferredLength()
-        // horse.getGrassRating()
-
         int d = (int)(7 - Math.abs(horse.getPreferredLength() - this.raceLength));
 
-        if (raceSurface.equals("grass"))
+        if (raceSurface.equalsIgnoreCase("grass"))
             d += horse.getGrassRating() / 2;
-        // this.raceLength
+        else if (raceSurface.equalsIgnoreCase("dirt"))
+            d += horse.getDirtRating() / 2;
+        else if (raceSurface.equalsIgnoreCase("mud"))
+            d += horse.getMudRating() / 2;
         // this.raceSurface
-       return (int)(Math.random() * 9);
+       return (int)(Math.random() * d);
     }
 
 
