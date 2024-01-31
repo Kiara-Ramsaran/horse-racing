@@ -12,12 +12,31 @@ public class HorseRacing {
             HorseRacingHelper.clearConsole();
 
             int numHorsesInRace = (int)(Math.random()*7)+5;
+            int raceLength;
+            int raceLengthRandom = (int)((Math.random()*3)); //gets random number from 0 to 2
+            if (raceLengthRandom == 0)
+                raceLength = HorseRacingHelper.SHORT;
+            else if (raceLengthRandom == 1)
+                raceLength = HorseRacingHelper.MIDDLE;
+            else
+                raceLength = HorseRacingHelper.LONG;
 
-            Race race = HorseRacingHelper.createRace(numHorsesInRace, HorseRacingHelper.SHORT, HorseRacingHelper.DIRT);
+            int raceTerrain;
+            int raceTerrainRandom = (int)((Math.random()*3)); //gets random number from 0 to 2
+            if (raceTerrainRandom == 0)
+                raceTerrain = HorseRacingHelper.GRASS;
+            else if (raceTerrainRandom == 1)
+                raceTerrain = HorseRacingHelper.DIRT;
+            else
+                raceTerrain = HorseRacingHelper.MUD;
+
+            
+// betting
+            Race race = HorseRacingHelper.createRace(numHorsesInRace, raceLength, raceTerrain);
             race.displayRaceInfo();
-
+//update wallet
+            race.placeBets();
             race.startRace();
-
             System.out.println("Race is Over");
             gameOver = playAgain(in);
         }
