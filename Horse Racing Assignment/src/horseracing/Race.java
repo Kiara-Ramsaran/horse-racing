@@ -2,6 +2,7 @@ package horseracing;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Race {
     private List<Horse> horses;
@@ -47,7 +48,7 @@ public class Race {
     public String getRaceSurface() {
         return raceSurface;
     }
-
+/*
     public void displayHorseTable(){
         System.out.printf("|%-10s|%-20s|%-15s|%-15s|%-15s|%-15s|%-15s|%-15s|%-15s|\n", "#","Horse Name", "Dirt Rating (%)", "Grass Rating (%)", "Mud Rating (%)", "Preferred Length", "Odds for Win", "Odds for Place", "Odds for Show");
         
@@ -70,6 +71,37 @@ public class Race {
             System.out.printf("|%-10s|%-20s|%-15s|%-15s|%-15s|%-15s|%-15s|%-15s|%-15s|\n", s0, s1, s2, s3, s4, s5, s6, s7, s8);
         }
         System.out.println("+----------+--------------------+---------------+----------------+---------------+---------------+--------------+---------------+---------------+");
+    }
+*/
+
+
+
+     public void displayHorseTable(){
+        //Title and Headings
+        int terrainRating = 0;
+        System.out.println("+-------------------------+-----+-----+-----+-----+-----+");
+        System.out.printf("|%-25s|%5s|%5s|%5s|%5s|%5s|\n", "Horse Name", raceSurface, "Leng", "Win", "Place", "Show");
+
+        for (int i = 0; i < horses.size(); i++) {   // iterates through the horses list
+            Horse horse = horses.get(i);
+            int c0 = horse.getNumber();
+            String c1 = horse.getName();
+            double c3 = horse.getPreferredLength();
+           //String c4 = "" + Odds for win 
+           //String c5 = "" + Odds for Place
+           //String c6 = "" + Odds for Show
+            if (raceSurface.equalsIgnoreCase("grass"))
+                terrainRating = horse.getGrassRating();
+            else if (raceSurface.equalsIgnoreCase("dirt"))
+                terrainRating = horse.getDirtRating();
+            else if (raceSurface.equalsIgnoreCase("mud"))
+                terrainRating = horse.getMudRating();
+
+            System.out.println("+-------------------------+-----+-----+-----+-----+-----+");
+            //Add s6, s7, and s8 below
+            System.out.printf("|%-25s|%5s|%5s|%5s|%5s|%5s|\n",c0+". "+c1, terrainRating, c3, "win", "place", "show");
+        }
+        System.out.println("+-------------------------+-----+-----+-----+-----+-----+");
     }
 
     public void displayRaceInfo() {
@@ -120,7 +152,7 @@ public class Race {
             if (results.size() == horses.size())
                 done = true;
         }
-
+//call bet display. Display odds and display how much they won
         HorseRacingHelper.stopMusic();
     }
     // Other methods for simulating the race, calculating winners, etc., can be added as needed
@@ -160,6 +192,78 @@ public class Race {
     private void resetHorses() {
         for (Horse horse : horses) {
             horse.resetCurrenPosition();
+        }
+    }
+    public void placeBets(){
+        boolean continueBetting = true;
+        Scanner in = new Scanner(System.in);
+        boolean isDouble = false;
+        double tempWallet = 0;
+        double wallet = 0;
+        while(!isDouble){
+            System.out.print("How much starting money do you want in your wallet ?: $");
+            isDouble = in.hasNextDouble();
+            if (!isDouble){
+                System.out.println("Invalid Input. Wallet amount must be a numerical value.");
+                in.nextLine();
+            }
+            else if (isDouble){
+                tempWallet = in.nextDouble();
+                if (tempWallet<=0){
+                    System.out.println("Invalid Input. Wallet amount must be greater than $0.");
+                    isDouble=false;
+                    in.nextLine();
+                }
+            }
+        }
+        wallet = tempWallet;
+        System.out.printf("Your wallet balance is $%.2f\n" , wallet);
+        wallet = ((int)(wallet * 100)) / 100.00; // Forcing all decimals to be 2 decimal places.
+        in.nextLine(); 
+        System.out.println("Types of Bets:");
+        System.out.println("1. Win: A bet on a horse to finish first.");
+        System.out.println("2. Place: A bet placed on a horse to finish either first or second.");
+        System.out.println("3. Show: A bet placed on a horse to finish first, second, or third.");
+        while (continueBetting) {
+            System.out.print("Do you want to make a bet (y/n)?: ");
+            String yn = in.nextLine();
+            System.out.println("yn = '"+ yn + "'");
+            if (yn.equalsIgnoreCase("y")||yn.equalsIgnoreCase("n")){
+                if (yn.equalsIgnoreCase("n")){
+                    continueBetting = false;
+                }
+                //start
+                if (yn.equalsIgnoreCase("y")){
+                    String betType;
+                    boolean isValid = false;
+                    while(!isValid){
+                        System.out.print("What type of bet do you want to make?");
+                        betType = in.nextLine();
+                        if (!betType.equals("1")&&!betType.equals("2")&&!betType.equals("3")){
+                            System.out.println("Invalid Input. Must input 1,2,or 3.");
+                        }
+                        else{
+                            isValid = true;
+                        }
+                    }
+                    boolean validEntry=false;
+                    while(!validEntry){
+                        System.out.print("Which horse do you want to bet on? : ");
+                        String input = in.nextLine();
+                        for(int i = 1 ; i<=numHorses()&&!validEntry;i++){
+                            if(input.equals(""+i)){
+                                validEntry = true;
+                             }
+                        }
+                        if (!validEntry){
+                            System.out.println("Invalid Input horse does not exist.");
+                        }
+                    }
+                }
+            }
+            else{
+                System.out.println("Invalid Input. Must be y or n.");
+            }
         }
     }
 }
