@@ -84,10 +84,11 @@ public class Race {
 
         for (int i = 0; i < horses.size(); i++) {   // iterates through the horses list
             Horse horse = horses.get(i);
+            int oddsValue = odds(horse);
             int c0 = horse.getNumber();
             String c1 = horse.getName();
             double c3 = horse.getPreferredLength();
-           //String c4 = "" + Odds for win 
+           String c4 = "" + fraction(oddsValue); 
            //String c5 = "" + Odds for Place
            //String c6 = "" + Odds for Show
             if (raceSurface.equalsIgnoreCase("grass"))
@@ -99,7 +100,7 @@ public class Race {
 
             System.out.println("+-------------------------+-----+-----+-----+-----+-----+");
             //Add s6, s7, and s8 below
-            System.out.printf("|%-25s|%5s|%5s|%5s|%5s|%5s|\n",c0+". "+c1, terrainRating, c3, "win", "place", "show");
+            System.out.printf("|%-25s|%5s|%5s|%5s|%5s|%5s|\n",c0+". "+c1, terrainRating, c3, c4, "place", "show");
         }
         System.out.println("+-------------------------+-----+-----+-----+-----+-----+");
     }
