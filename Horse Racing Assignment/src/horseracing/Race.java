@@ -49,24 +49,27 @@ public class Race {
     }
 
     public void displayHorseTable(){
-        System.out.printf("|%-15s|%-20s|%-15s|%-15s|%-15s|%-15s|%-15s|%-15s|%-15s|\n", "#","Horse Name", "Dirt Rating (%)", "Grass Rating (%)", "Mud Rating (%)", "Preferred Length", "Odds for Win", "Odds for Place", "Odds for Show");
+        System.out.printf("|%-10s|%-20s|%-15s|%-15s|%-15s|%-15s|%-15s|%-15s|%-15s|\n", "#","Horse Name", "Dirt Rating (%)", "Grass Rating (%)", "Mud Rating (%)", "Preferred Length", "Odds for Win", "Odds for Place", "Odds for Show");
+        
         for (int i = 0; i < horses.size(); i++) {   // iterates through the horses list
             Horse horse = horses.get(i);
+            int oddsValue = odds(horse);
             String s0 = "" + (i + 1);
             String s1 = "" + horse.getName();
             String s2 = "" + horse.getDirtRating();
             String s3 = "" + horse.getGrassRating();
             String s4 = "" + horse.getMudRating();
             String s5 = "" + horse.getPreferredLength();
-            String s6 = "" + fraction(odds(horse));
-            String s7 = "" ;
+            String s6 = "" + fraction(oddsValue);
+            String s7 = "";
             String s8 = "";
 
-            
-            System.out.println("+---------------+--------------------+---------------+----------------+---------------+---------------+--------------+---------------+---------------+");
-            System.out.printf("|%-15s|%-20s|%-15s|%-15s|%-15s|%-15s|\n", s0, s1, s2, s3, s4, s5, s6, s7, s8);
+        
+    
+            System.out.println("+----------+--------------------+---------------+----------------+---------------+---------------+--------------+---------------+---------------+");
+            System.out.printf("|%-10s|%-20s|%-15s|%-15s|%-15s|%-15s|%-15s|%-15s|%-15s|\n", s0, s1, s2, s3, s4, s5, s6, s7, s8);
         }
-        System.out.println("+---------------+--------------------+---------------+----------------+---------------+---------------+--------------+---------------+---------------+");
+        System.out.println("+----------+--------------------+---------------+----------------+---------------+---------------+--------------+---------------+---------------+");
     }
 
     public void displayRaceInfo() {
@@ -150,11 +153,9 @@ public class Race {
     return (int) oddsValue;
        
     }
-    public String fraction ( int oddsValue){
-
-    return oddsValue + "-1";
+    public String fraction(int oddsValue) {
+        return oddsValue + "-1";
     }
-
    
     private void resetHorses() {
         for (Horse horse : horses) {
