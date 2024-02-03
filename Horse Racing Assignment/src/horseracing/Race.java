@@ -78,31 +78,27 @@ public class Race {
 
      public void displayHorseTable(){
         //Title and Headings
-        int terrainRating = 0;
-        System.out.println("+-------------------------+-----+-----+-----+-----+-----+");
-        System.out.printf("|%-25s|%5s|%5s|%5s|%5s|%5s|\n", "Horse Name", raceSurface, "Leng", "Win", "Place", "Show");
+        System.out.println("+-------------------------+-----+-----+-----+-----+-----+-----+-----+");//Format for table in beginning
+        System.out.printf("|%-25s|%5s|%5s|%5s|%5s|%5s|%5s|%5s|\n", "Horse Name", "Grass", "Mud", "Dirt", "Leng", "Win", "Place", "Show");
 
         for (int i = 0; i < horses.size(); i++) {   // iterates through the horses list
             Horse horse = horses.get(i);
-            int oddsValue = odds(horse);
+            int winOddsValue = winOdds(horse);
+            int placeOddsValue = placeOdds(horse);
+            int showOddsValue = showOdds(horse);
             int c0 = horse.getNumber();
             String c1 = horse.getName();
-            double c3 = horse.getPreferredLength();
-           String c4 = "" + fraction(oddsValue); 
-           //String c5 = "" + Odds for Place
-           //String c6 = "" + Odds for Show
-            if (raceSurface.equalsIgnoreCase("grass"))
-                terrainRating = horse.getGrassRating();
-            else if (raceSurface.equalsIgnoreCase("dirt"))
-                terrainRating = horse.getDirtRating();
-            else if (raceSurface.equalsIgnoreCase("mud"))
-                terrainRating = horse.getMudRating();
-
-            System.out.println("+-------------------------+-----+-----+-----+-----+-----+");
-            //Add s6, s7, and s8 below
-            System.out.printf("|%-25s|%5s|%5s|%5s|%5s|%5s|\n",c0+". "+c1, terrainRating, c3, c4, "place", "show");
+            double c2 = horse.getPreferredLength();
+            String c3 = "" + horse.getGrassRating();
+            String c4 = "" + horse.getMudRating();
+            String c5 = "" + horse.getDirtRating();
+           String c6 = "" + winOddsValue + "-1"; 
+           String c7 = "" + placeOddsValue + "-1";
+           String c8 = "" + showOddsValue + "-1";
+            System.out.println("+-------------------------+-----+-----+-----+-----+-----+-----+-----+");
+            System.out.printf("|%-25s|%5s|%5s|%5s|%5s|%5s|%5s|%5s|\n",c0+". "+c1, c3, c4, c5, c2, c6, c7, c8 );
         }
-        System.out.println("+-------------------------+-----+-----+-----+-----+-----+");
+        System.out.println("+-------------------------+-----+-----+-----+-----+-----+-----+-----+");
     }
 
     public void displayRaceInfo() {
@@ -171,23 +167,31 @@ public class Race {
         // this.raceSurface
        return (int)(Math.random() * d);
     }
-   public int odds(Horse horse) {
+   public int winOdds(Horse horse) { 
         
         int c = (int)(7 - Math.abs(horse.getPreferredLength() - this.raceLength));
 
         if (raceSurface.equalsIgnoreCase("grass"))
-            c += horse.getGrassRating() * 10 / 2;
+            c += horse.getGrassRating() * 10 / 2; 
         else if (raceSurface.equalsIgnoreCase("dirt"))
             c += horse.getDirtRating() * 10 / 2;
         else if (raceSurface.equalsIgnoreCase("mud"))
             c += horse.getMudRating() * 10 / 2;
-        float total =  (c + (horse.getGrassRating() * 10 + horse.getDirtRating() * 10 + horse.getMudRating() * 10) / 12 );
-        float oddsValue =  Math.round((2 * Math.pow(100 / total, 2)) - 1);
-    return (int) oddsValue;
-       
+        float total =  (c + (horse.getGrassRating() * 10 + horse.getDirtRating() * 10 + horse.getMudRating() * 10) / 12 ); //Multiplying ratings by 10 to properly do calculation
+        float winOddsValue =  Math.round((2 * Math.pow(100 / total, 2)) - 1); //Calculating win odds
+        return (int) winOddsValue;
     }
-    public String fraction(int oddsValue) {
-        return oddsValue + "-1";
+
+    public int placeOdds (Horse horse){
+    int winoddsValue = winOdds(horse);
+    double placeOddsValue = (winoddsValue * 0.8);
+    return (int) placeOddsValue;
+    }
+     
+    public int showOdds (Horse horse){
+    int winoddsValue = winOdds(horse);
+    double showOddsValue = (winoddsValue * 0.6);
+    return (int) showOddsValue;
     }
    
     private void resetHorses() {
@@ -217,6 +221,7 @@ public class Race {
                 }
             }
         }
+        
         wallet = tempWallet;
         System.out.printf("Your wallet balance is $%.2f\n" , wallet);
         wallet = ((int)(wallet * 100)) / 100.00; // Forcing all decimals to be 2 decimal places.
