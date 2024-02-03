@@ -12,9 +12,9 @@ public class Race {
 
     private List<Horse> results;
     private Bet userBet; 
-    int betType = userBet.getBetType();
-    int horseSelected = userBet.getSelectedHorse();
-    double betAmount = userBet.getAmount();
+    int betType ;
+    int horseSelected ;
+    double betAmount;
    private boolean raceFinished = false;
 
 
@@ -30,6 +30,9 @@ public class Race {
         this.results = new ArrayList<Horse>();
         this.userBet = new Bet(0, 0, 0); 
         this.raceFinished = false;
+        this.horseSelected = userBet.getSelectedHorse();
+        this.betAmount = userBet.getAmount();
+        this.betType = userBet.getBetType();
     }
 
 
@@ -287,12 +290,10 @@ public class Race {
             else{
                 System.out.println("Invalid Input. Must be y or n.");
             }
-        }double initialWallet = wallet; 
-        wallet = betAmount(wallet);
-        if (wallet > initialWallet) {
-            System.out.println("You won the bet. Your wallet balance is now $" + wallet);
-    } else if (wallet < initialWallet) {
-        System.out.println("You lost the bet. Your wallet balance is now $" + wallet);
+        }//double initialWallet = wallet; 
+        //wallet = betAmount(wallet);
+        //if (wallet > initialWallet) {
+           // System.out.println("You won the bet. Your wallet balance is now $" + wallet);
+    } //else if (wallet < initialWallet) {
+        //System.out.println("You lost the bet. Your wallet balance is now $" + wallet);
     }
-} 
-}
