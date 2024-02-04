@@ -109,10 +109,8 @@ public class Race {
         int numSpaces = (int)(raceLength*10);
         boolean done = false;
         HorseRacingHelper.pauseForMilliseconds(1000);
-        HorseRacingHelper.playBackgroundMusicAndWait("C:\\Users\\kramsaran\\OneDrive - Bayview Glen Private School\\ICS Workspaces\\n" + //
-                        "ew horse racing\\horse-racing\\Horse Racing Assignment\\Race.wav");
-        HorseRacingHelper.playBackgroundMusic("C:\\Users\\kramsaran\\OneDrive - Bayview Glen Private School\\ICS Workspaces\\n" + //
-                        "ew horse racing\\horse-racing\\Horse Racing Assignment\\horse_gallop.wav", true);
+        HorseRacingHelper.playBackgroundMusicAndWait("Race.wav");
+        HorseRacingHelper.playBackgroundMusic("horse_gallop.wav", true);
 
         
         while(!done){
