@@ -7,10 +7,14 @@ public class HorseRacing {
      public static void main(String[] args) {
         Scanner in = new Scanner(System.in);    
         HorseRacingHelper.prepareHorseRacingSimulation();
+        double wallet = 0.0;
+        boolean askedWalletAmount = false;
         boolean gameOver = false;
         while(!gameOver){
             HorseRacingHelper.clearConsole();
 
+
+            // Determining random values for number of horses in the race, race length and race terrain. 
             int numHorsesInRace = (int)(Math.random()*7)+5;
             int raceLength;
             int raceLengthRandom = (int)((Math.random()*3)); //gets random number from 0 to 2
@@ -31,13 +35,20 @@ public class HorseRacing {
                 raceTerrain = HorseRacingHelper.MUD;
 
             
-// betting
             Race race = HorseRacingHelper.createRace(numHorsesInRace, raceLength, raceTerrain);
             race.displayRaceInfo();
-//update wallet
-            race.placeBets();
+            // To ensure the user is asked for wallet amount the first time played only.
+            if (!askedWalletAmount){
+                wallet = askWalletAmount(); 
+                askedWalletAmount = true;
+            }
+            // placeBets collects and validates betting input from the user.
+            wallet = race.placeBets(wallet);
             race.startRace();
             System.out.println("Race is Over");
+            // betResult calculates the result of the bet
+            wallet = race.betResult(wallet);
+            System.out.println("Curent wallet amount is $" + wallet + ".");
             gameOver = playAgain(in);
         }
 
@@ -55,5 +66,33 @@ public class HorseRacing {
 
         return false;
 
+    }
+    // This method asks the user for wallet starting amount and validates the input ensuring a double value. 
+    // Checks for non-numerical values and values less than 0.
+    public static double askWalletAmount(){
+        Scanner in = new Scanner(System.in);  
+        boolean isDouble = false;
+        double tempWallet = 0;
+        double amountForWallet = 0;
+        while(!isDouble){
+            System.out.print("How much starting money do you want in your wallet?: $");
+            isDouble = in.hasNextDouble();
+            if (!isDouble){
+                System.out.println("Invalid Input. Wallet amount must be a numerical value.");
+                in.nextLine();
+            }
+            else if (isDouble){
+                tempWallet = in.nextDouble();
+                if (tempWallet<=0){
+                    System.out.println("Invalid Input. Wallet amount must be greater than $0.");
+                    isDouble=false;
+                    in.nextLine();
+                }
+            }
+        }
+        amountForWallet = tempWallet;
+        System.out.printf("Your wallet balance is $%.2f\n\n" , amountForWallet);
+        amountForWallet = ((int)(amountForWallet * 100)) / 100.00; // Forcing all decimals to be 2 decimal places.
+        return amountForWallet;
     }
 }
