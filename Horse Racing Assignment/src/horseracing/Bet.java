@@ -21,6 +21,17 @@ this.horseSelected = horseSelected;
     public double getAmount() {
         return betAmount;
     }
+    public void setBetType(int newBetType) {
+        betType = newBetType;
+    }
+
+    public void setSelectedHorse(int newHorseSelected) {
+        horseSelected = newHorseSelected;
+    }
+
+    public void setAmount(double newBetAmount) {
+        betAmount = newBetAmount;
+    }
 }
 
 
