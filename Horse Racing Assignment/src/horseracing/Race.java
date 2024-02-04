@@ -12,17 +12,6 @@ public class Race {
 
     private List<Horse> results;
     private Bet userBet; 
-    //int betType ;
-    //int horseSelected ;
-    //double betAmount;
-    private boolean raceFinished = false;
-    /*
-    String betType;
-    double betAmount = 0;
-    String horseChoice = "0";
-    */
-    
-    
 
 
     public Race(List<Horse> horses, double raceLength, String raceSurface) {
@@ -32,10 +21,6 @@ public class Race {
         this.currentHorse = 0;
         this.results = new ArrayList<Horse>();
         this.userBet = new Bet(0, 0, 0); 
-        this.raceFinished = false;
-        //this.horseSelected = userBet.getSelectedHorse();
-        //this.betAmount = userBet.getAmount();
-        //this.betType = userBet.getBetType();
     }
 
 
@@ -124,8 +109,10 @@ public class Race {
         int numSpaces = (int)(raceLength*10);
         boolean done = false;
         HorseRacingHelper.pauseForMilliseconds(1000);
-        HorseRacingHelper.playBackgroundMusicAndWait("Race.wav");
-        HorseRacingHelper.playBackgroundMusic("horse_gallop.wav", true);
+        HorseRacingHelper.playBackgroundMusicAndWait("C:\\Users\\kramsaran\\OneDrive - Bayview Glen Private School\\ICS Workspaces\\n" + //
+                        "ew horse racing\\horse-racing\\Horse Racing Assignment\\Race.wav");
+        HorseRacingHelper.playBackgroundMusic("C:\\Users\\kramsaran\\OneDrive - Bayview Glen Private School\\ICS Workspaces\\n" + //
+                        "ew horse racing\\horse-racing\\Horse Racing Assignment\\horse_gallop.wav", true);
 
         
         while(!done){
@@ -238,24 +225,21 @@ public class Race {
         String horseChoice = "";
         double betAmount = 0.0;
         Scanner in = new Scanner(System.in);
-        System.out.println("wallet inside of place bets = " + wallet);
         System.out.println("Types of Bets:");
         System.out.println("1. Win: A bet on a horse to finish first.");
         System.out.println("2. Place: A bet placed on a horse to finish either first or second.");
         System.out.println("3. Show: A bet placed on a horse to finish first, second, or third.");
         System.out.println();
         if(wallet<=0){
-        System.out.println("no money");
+        System.out.println("Your wallet is empty, sorry you can't place a bet.");
         }
         while (continueBetting&&wallet>0) {
             System.out.print("Do you want to make a bet (y/n)?: ");
             String yn = in.nextLine();
-            //System.out.println("yn = '"+ yn + "'");
             if (yn.equalsIgnoreCase("y")||yn.equalsIgnoreCase("n")){
                 if (yn.equalsIgnoreCase("n")){
                     continueBetting = false;
                 }
-                //start
                 if (yn.equalsIgnoreCase("y")){
                     boolean isValid = false;
                     System.out.println();
@@ -283,7 +267,6 @@ public class Race {
                             System.out.println("Invalid Input horse does not exist.");
                         }
                     }
-                    //Scanner in = new Scanner(System.in);
                     boolean isDouble = false;
                     System.out.println();
                     while(!isDouble){
