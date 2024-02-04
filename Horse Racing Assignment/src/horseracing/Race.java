@@ -1,6 +1,5 @@
 package horseracing;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -13,15 +12,18 @@ public class Race {
 
     private List<Horse> results;
     private Bet userBet; 
-    int betType ;
-    int horseSelected ;
-    double betAmount;
-   private boolean raceFinished = false;
+    //int betType ;
+    //int horseSelected ;
+    //double betAmount;
+    private boolean raceFinished = false;
+    /*
+    String betType;
+    double betAmount = 0;
+    String horseChoice = "0";
+    */
+    
+    
 
-
-   public boolean isRaceFinished() { //Checks if race is finished
-    return raceFinished;
-}
 
     public Race(List<Horse> horses, double raceLength, String raceSurface) {
         this.horses = horses;
@@ -31,9 +33,9 @@ public class Race {
         this.results = new ArrayList<Horse>();
         this.userBet = new Bet(0, 0, 0); 
         this.raceFinished = false;
-        this.horseSelected = userBet.getSelectedHorse();
-        this.betAmount = userBet.getAmount();
-        this.betType = userBet.getBetType();
+        //this.horseSelected = userBet.getSelectedHorse();
+        //this.betAmount = userBet.getAmount();
+        //this.betType = userBet.getBetType();
     }
 
 
@@ -41,13 +43,16 @@ public class Race {
         return horses;
     }
 
+
     public int numHorses(){
         return horses.size();
     }
 
+
     public Horse getCurrentHorse(){
         return horses.get(currentHorse);
     }
+
 
     public Horse getNextHorse(){
         if (currentHorse == horses.size())
@@ -56,15 +61,18 @@ public class Race {
         return horses.get(currentHorse++);
     }
 
+
     public double getRaceLength() {
         return raceLength;
     }
+
 
     public String getRaceSurface() {
         return raceSurface;
     }
 
-     public void displayHorseTable(){
+
+    public void displayHorseTable(){
         //Title and Headings
         System.out.println("+-------------------------+-----+-----+-----+-----+-----+-----+-----+");//Format for table in beginning
         System.out.printf("|%-25s|%5s|%5s|%5s|%5s|%5s|%5s|%5s|\n", "Horse Name", "Grass", "Mud", "Dirt", "Leng", "Win", "Place", "Show");
@@ -80,14 +88,15 @@ public class Race {
             String c3 = "" + horse.getGrassRating();
             String c4 = "" + horse.getMudRating();
             String c5 = "" + horse.getDirtRating();
-           String c6 = "" + winOddsValue + "-1"; 
-           String c7 = "" + placeOddsValue + "-1";
-           String c8 = "" + showOddsValue + "-1";
+            String c6 = "" + winOddsValue + "-1"; 
+            String c7 = "" + placeOddsValue + "-1";
+            String c8 = "" + showOddsValue + "-1";
             System.out.println("+-------------------------+-----+-----+-----+-----+-----+-----+-----+");
             System.out.printf("|%-25s|%5s|%5s|%5s|%5s|%5s|%5s|%5s|\n",c0+". "+c1, c3, c4, c5, c2, c6, c7, c8 );
         }
         System.out.println("+-------------------------+-----+-----+-----+-----+-----+-----+-----+");
     }
+
 
     public void displayRaceInfo() {
         System.out.println("Race Information:");
@@ -99,6 +108,7 @@ public class Race {
         // }
         displayHorseTable();
     }
+
 
     public void displayResults(){
         System.out.println("\n\nRace Results");
@@ -142,6 +152,7 @@ public class Race {
     }
     // Other methods for simulating the race, calculating winners, etc., can be added as needed
 
+
     public int getIncrementForHorse(Horse horse) {
 
         int d = (int)(7 - Math.abs(horse.getPreferredLength() - this.raceLength));
@@ -153,9 +164,11 @@ public class Race {
         else if (raceSurface.equalsIgnoreCase("mud"))
             d += horse.getMudRating() / 2;
         // this.raceSurface
-       return (int)(Math.random() * d);
+       return (int)((Math.random() * d)+1);
     }
-   public int winOdds(Horse horse) { 
+
+
+    public int winOdds(Horse horse) { 
         
         int c = (int)(7 - Math.abs(horse.getPreferredLength() - this.raceLength));
 
@@ -173,6 +186,7 @@ public class Race {
         return (int) winOddsValue;
     }
 
+    
     public int placeOdds (Horse horse){
     int winoddsValue = winOdds(horse);
     double placeOddsValue = (winoddsValue * 0.8);
@@ -181,89 +195,72 @@ public class Race {
     }
     return (int) placeOddsValue;
     }
-     
+    
+
     public int showOdds (Horse horse){
     int winoddsValue = winOdds(horse);
     double showOddsValue = (winoddsValue * 0.6);
     if (showOddsValue < 1.0){ 
         showOddsValue = 1.0;
-        }
+    }
     return (int) showOddsValue;
     }
-  
+   
+
     private void resetHorses() {
         for (Horse horse : horses) {
             horse.resetCurrenPosition();
         }
     }
 
-    public double betAmount(double wallet){
+
+    public double betResult(double wallet){
         Bet userBet = this.userBet;
-    if (isRaceFinished() == true){
      for (Horse horse : getHorses()){
-        if (horse.getNumber() == horseSelected && results.indexOf(horse) == 0 && userBet.getBetType() == 1){
+        if (horse.getNumber() == userBet.getSelectedHorse() && results.indexOf(horse) == 0 && userBet.getBetType() == 1){
         int winOddsValue = winOdds(horse);
         wallet += winOddsValue * userBet.getAmount();
-         } else if (horse.getNumber() == horseSelected && results.indexOf(horse) <= 1 && userBet.getBetType() == 2){
+         } else if (horse.getNumber() == userBet.getSelectedHorse() && results.indexOf(horse) <= 1 && userBet.getBetType() == 2){
             int placeOddsValue = placeOdds(horse);
             wallet += placeOddsValue * userBet.getAmount();
-         } else if (horse.getNumber() == horseSelected && results.indexOf(horse) <= 2 && userBet.getBetType() == 3){
+         } else if (horse.getNumber() == userBet.getSelectedHorse() && results.indexOf(horse) <= 2 && userBet.getBetType() == 3){
             int showOddsValue = showOdds(horse);
             wallet += showOddsValue * userBet.getAmount();
-        } else {
-             wallet -= userBet.getAmount();
-        } 
-      } 
-    }
-    return wallet;
-}
-    
-    public void placeBets(){
-        boolean continueBetting = true;
-        Scanner in = new Scanner(System.in);
-        boolean isDouble = false;
-        double tempWallet = 0;
-        double wallet = 0;
-        while(!isDouble){
-            System.out.print("How much starting money do you want in your wallet ?: $");
-            isDouble = in.hasNextDouble();
-            if (!isDouble){
-                System.out.println("Invalid Input. Wallet amount must be a numerical value.");
-                in.nextLine();
-            }
-            else if (isDouble){
-                tempWallet = in.nextDouble();
-                if (tempWallet<=0){
-                    System.out.println("Invalid Input. Wallet amount must be greater than $0.");
-                    isDouble=false;
-                    in.nextLine();
-                }
-            }
         }
-      
-       
-        wallet = tempWallet;
-        System.out.printf("Your wallet balance is $%.2f\n" , wallet);
-        wallet = ((int)(wallet * 100)) / 100.00; // Forcing all decimals to be 2 decimal places.
-        in.nextLine(); 
+      } 
+    return wallet;
+    }
+
+
+    public double placeBets(double wallet){
+        boolean continueBetting = true;
+        String betType = "";
+        String horseChoice = "";
+        double betAmount = 0.0;
+        Scanner in = new Scanner(System.in);
+        System.out.println("wallet inside of place bets = " + wallet);
         System.out.println("Types of Bets:");
         System.out.println("1. Win: A bet on a horse to finish first.");
         System.out.println("2. Place: A bet placed on a horse to finish either first or second.");
         System.out.println("3. Show: A bet placed on a horse to finish first, second, or third.");
-        while (continueBetting) {
+        System.out.println();
+        if(wallet<=0){
+        System.out.println("no money");
+        }
+        while (continueBetting&&wallet>0) {
             System.out.print("Do you want to make a bet (y/n)?: ");
             String yn = in.nextLine();
-            System.out.println("yn = '"+ yn + "'");
+            //System.out.println("yn = '"+ yn + "'");
             if (yn.equalsIgnoreCase("y")||yn.equalsIgnoreCase("n")){
                 if (yn.equalsIgnoreCase("n")){
                     continueBetting = false;
                 }
                 //start
                 if (yn.equalsIgnoreCase("y")){
-                    String betType;
                     boolean isValid = false;
+                    System.out.println();
                     while(!isValid){
-                        System.out.print("What type of bet do you want to make?");
+                        System.out.print("What type of bet do you want to make?: ");
                         betType = in.nextLine();
                         if (!betType.equals("1")&&!betType.equals("2")&&!betType.equals("3")){
                             System.out.println("Invalid Input. Must input 1,2,or 3.");
@@ -273,28 +270,59 @@ public class Race {
                         }
                     }
                     boolean validEntry=false;
+                    System.out.println();
                     while(!validEntry){
-                        System.out.print("Which horse do you want to bet on? : ");
-                        String input = in.nextLine();
+                        System.out.print("Which horse do you want to bet on?: ");
+                        horseChoice = in.nextLine();
                         for(int i = 1 ; i<=numHorses()&&!validEntry;i++){
-                            if(input.equals(""+i)){
+                            if(horseChoice.equals(""+i)){
                                 validEntry = true;
                              }
                         }
                         if (!validEntry){
                             System.out.println("Invalid Input horse does not exist.");
                         }
-                    } 
-                    
+                    }
+                    //Scanner in = new Scanner(System.in);
+                    boolean isDouble = false;
+                    System.out.println();
+                    while(!isDouble){
+                        System.out.print("How much would you like to bet?: $");
+                        isDouble = in.hasNextDouble();
+                        if (!isDouble){
+                            System.out.println("Invalid Input. Bet amount must be a numerical value.");
+                            in.nextLine();
+                        }
+                        else if (isDouble){
+                            betAmount = in.nextDouble();
+                            if (betAmount<=0){
+                                System.out.println("Invalid Input. Bet amount must be greater than $0.");
+                                isDouble=false;
+                                in.nextLine();
+                            }
+                            else if(betAmount>wallet){
+                                System.out.println("Insufficient Funds! Bet amount must be less than or equal to $" + wallet + ".");
+                                isDouble=false;
+                                in.nextLine(); 
+                            }
+                        }
+                    }
+                    //Updating bet object with user input for bet type, horse choice, and bet amount.
+                    userBet.setBetType(Integer.parseInt(betType));
+                    userBet.setSelectedHorse(Integer.parseInt(horseChoice));
+                    userBet.setAmount(betAmount);
+                    wallet-=betAmount;
+                    System.out.printf("Your wallet balance is now $%.2f\n\n" , wallet);
+                    wallet = ((int)(wallet * 100)) / 100.00; // Forcing all decimals to be 2 decimal places.
+                    in.nextLine();
+                    continueBetting = false;
                 }
             }
             else{
                 System.out.println("Invalid Input. Must be y or n.");
             }
-        }//double initialWallet = wallet; 
-        //wallet = betAmount(wallet);
-        //if (wallet > initialWallet) {
-           // System.out.println("You won the bet. Your wallet balance is now $" + wallet);
-    } //else if (wallet < initialWallet) {
-        //System.out.println("You lost the bet. Your wallet balance is now $" + wallet);
+            
+        }
+        return wallet;
     }
+}
