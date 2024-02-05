@@ -7,7 +7,7 @@ public class HorseRacing {
      public static void main(String[] args) {
         Scanner in = new Scanner(System.in);    
         HorseRacingHelper.prepareHorseRacingSimulation();
-        double wallet = 0.0;
+        double wallet = 0.0; // Represents a user's wallet accross all races.
         boolean askedWalletAmount = false;
         boolean gameOver = false;
         while(!gameOver){
@@ -48,7 +48,7 @@ public class HorseRacing {
             System.out.println("Race is Over");
             // betResult calculates the result of the bet
             wallet = race.betResult(wallet);
-            System.out.println("Curent wallet amount is $" + wallet + ".");
+            System.out.printf("Curent wallet amount is $%.2f.\n", wallet);
             gameOver = playAgain(in);
         }
 
@@ -91,8 +91,8 @@ public class HorseRacing {
             }
         }
         amountForWallet = tempWallet;
-        System.out.printf("Your wallet balance is $%.2f\n\n" , amountForWallet);
         amountForWallet = ((int)(amountForWallet * 100)) / 100.00; // Forcing all decimals to be 2 decimal places.
+        System.out.printf("Your wallet balance is $%.2f\n\n" , amountForWallet);
         return amountForWallet;
     }
 }
