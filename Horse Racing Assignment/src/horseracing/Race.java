@@ -137,11 +137,14 @@ public class Race {
     }
     // Other methods for simulating the race, calculating winners, etc., can be added as needed
 
-
+    /* Determines how quickly a horse moves across the race track.
+    *  Influences are the horse's rating on the current race terrain, preferred length reletive to the race length.
+    *  The higher the rating and the lower the different between preferred length and race length, the quicker the hrse will move.
+    */
     public int getIncrementForHorse(Horse horse) {
 
         int d = (int)(7 - Math.abs(horse.getPreferredLength() - this.raceLength));
-
+        // using the horse's rating for the current surface type
         if (raceSurface.equalsIgnoreCase("grass"))
             d += horse.getGrassRating() / 2;
         else if (raceSurface.equalsIgnoreCase("dirt"))
@@ -216,34 +219,45 @@ public class Race {
     return wallet;
     }
 
-
+    /* placeBets method interacts with the user to determine the bet type, horse, and amount of money they would like to place.  
+     * Displays all bet types with explanation.
+     * Validates all input. bet type must be option 1,2, or 3. Placing a bet must be y or n. Horse choice must be a number assigned to a horse. Bet ammount must be a number greater than 0.
+     * Updates wallet amount after bet has been placed. Validates user has enough money in their wallet to place a bet. If not they can only view the race.
+     */
     public double placeBets(double wallet){
-        boolean continueBetting = true;
+        boolean continueToGetBet = true;
         String betType = "";
         String horseChoice = "";
         double betAmount = 0.0;
         Scanner in = new Scanner(System.in);
+        // Displaying a description of win, place, show.
         System.out.println("Types of Bets:");
         System.out.println("1. Win: A bet on a horse to finish first.");
         System.out.println("2. Place: A bet placed on a horse to finish either first or second.");
         System.out.println("3. Show: A bet placed on a horse to finish first, second, or third.");
         System.out.println();
+        // Checking if the user has any money to place a bet, if not they can view the race without placing a bet.
         if(wallet<=0){
         System.out.println("Your wallet is empty, sorry you can't place a bet.");
+        System.out.println("Sit back and enjoy viewing the race anyway.");
         }
-        while (continueBetting&&wallet>0) {
+        // Prompt the user for bet information unless they choose not to make a bet or we have already collected all information for a bet.
+        while (continueToGetBet&&wallet>0) {
             System.out.print("Do you want to make a bet (y/n)?: ");
             String yn = in.nextLine();
+            // Checking if user entered y or n, which is a valid input.
             if (yn.equalsIgnoreCase("y")||yn.equalsIgnoreCase("n")){
                 if (yn.equalsIgnoreCase("n")){
-                    continueBetting = false;
+                    continueToGetBet = false; // User chooses not to make a bet.
                 }
+                // User chooses to make a bet.
                 if (yn.equalsIgnoreCase("y")){
-                    boolean isValid = false;
+                    boolean isValid = false; // Type of bet is not valid until user input is validated.
                     System.out.println();
                     while(!isValid){
                         System.out.print("What type of bet do you want to make?: ");
                         betType = in.nextLine();
+                        // If bet type does not equal 1,2, or 3, input is invalid.
                         if (!betType.equals("1")&&!betType.equals("2")&&!betType.equals("3")){
                             System.out.println("Invalid Input. Must input 1,2,or 3.");
                         }
@@ -251,39 +265,45 @@ public class Race {
                             isValid = true;
                         }
                     }
-                    boolean validEntry=false;
+                    // 
+                    isValid = false; // Horse selected is not valid until user input is validated.
                     System.out.println();
-                    while(!validEntry){
+                    while(!isValid){
                         System.out.print("Which horse do you want to bet on?: ");
                         horseChoice = in.nextLine();
-                        for(int i = 1 ; i<=numHorses()&&!validEntry;i++){
+                        // Checking if the user input matches a valid horse selection from displayRaceTable().
+                        for(int i = 1 ; i<=numHorses()&&!isValid;i++){
                             if(horseChoice.equals(""+i)){
-                                validEntry = true;
+                                isValid = true;
                              }
                         }
-                        if (!validEntry){
+                        if (!isValid){
                             System.out.println("Invalid Input horse does not exist.");
                         }
                     }
-                    boolean isDouble = false;
+                    isValid = false; // Bet amount is not valid until the user input is validated.
                     System.out.println();
-                    while(!isDouble){
-                        System.out.print("How much would you like to bet?: $");
-                        isDouble = in.hasNextDouble();
-                        if (!isDouble){
+                    while(!isValid){
+                        System.out.printf("Your wallet has $%.2f. How much would you like to bet?: $", wallet);
+                        isValid = in.hasNextDouble();
+                        // Checking if the user input is a numerical value.
+                        if (!isValid){
                             System.out.println("Invalid Input. Bet amount must be a numerical value.");
                             in.nextLine();
                         }
-                        else if (isDouble){
+                        // At this point the user input is a numerical value. Now validate numerical value.
+                        else if (isValid){
                             betAmount = in.nextDouble();
+                            // Checking if the user placed a bet less than of equal to 0.
                             if (betAmount<=0){
                                 System.out.println("Invalid Input. Bet amount must be greater than $0.");
-                                isDouble=false;
+                                isValid=false;
                                 in.nextLine();
                             }
+                            // Checking if the user is trying to bet more than they have in their wallet.
                             else if(betAmount>wallet){
-                                System.out.println("Insufficient Funds! Bet amount must be less than or equal to $" + wallet + ".");
-                                isDouble=false;
+                                System.out.printf("Insufficient Funds! Bet amount must be less than or equal to $%.2f.\n", wallet);
+                                isValid=false;
                                 in.nextLine(); 
                             }
                         }
@@ -292,11 +312,12 @@ public class Race {
                     userBet.setBetType(Integer.parseInt(betType));
                     userBet.setSelectedHorse(Integer.parseInt(horseChoice));
                     userBet.setAmount(betAmount);
+                    // Deducting the bet placed amount from the user's wallet.
                     wallet-=betAmount;
                     System.out.printf("Your wallet balance is now $%.2f\n\n" , wallet);
                     wallet = ((int)(wallet * 100)) / 100.00; // Forcing all decimals to be 2 decimal places.
-                    in.nextLine();
-                    continueBetting = false;
+                    //in.nextLine();
+                    continueToGetBet = false; // We now have validated user input for bet type, horse choice, and bet amount.
                 }
             }
             else{
