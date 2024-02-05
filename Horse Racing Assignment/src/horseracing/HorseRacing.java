@@ -47,7 +47,7 @@ public class HorseRacing {
             race.startRace();
             System.out.println("Race is Over");
             // betResult calculates the result of the bet
-            wallet = race.betResult(wallet);
+            wallet = race.betAmount(wallet);
             System.out.printf("Curent wallet amount is $%.2f.\n", wallet);
             gameOver = playAgain(in);
         }

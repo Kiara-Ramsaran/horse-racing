@@ -1,15 +1,16 @@
 package horseracing;
 
-public class Bet {
-    private int betType;
-    private double betAmount;
-    private int horseSelected;
+public class Bet { //Initializing bet class
+    private int betType; //Type of bet
+    private double betAmount; // How much money the user bet
+    private int horseSelected; // What horse the user selected
     
-    public Bet(int betType, double betAmount, int horseSelected){
+    public Bet(int betType, double betAmount, int horseSelected){// Constructor
 this.betType = betType;
 this.betAmount = betAmount;
 this.horseSelected = horseSelected;
     }
+    //Getter methods
     public int getBetType() {
         return betType;
     }
@@ -21,6 +22,7 @@ this.horseSelected = horseSelected;
     public double getAmount() {
         return betAmount;
     }
+    //Setter methods
     public void setBetType(int newBetType) {
         betType = newBetType;
     }

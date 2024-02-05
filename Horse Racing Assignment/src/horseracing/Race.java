@@ -20,7 +20,7 @@ public class Race {
         this.raceSurface = raceSurface;
         this.currentHorse = 0;
         this.results = new ArrayList<Horse>();
-        this.userBet = new Bet(0, 0, 0); 
+        this.userBet = new Bet(0, 0, 0); // Creates new bet from bet class
     }
 
 
@@ -73,7 +73,7 @@ public class Race {
             String c3 = "" + horse.getGrassRating();
             String c4 = "" + horse.getMudRating();
             String c5 = "" + horse.getDirtRating();
-            String c6 = "" + winOddsValue + "-1"; 
+            String c6 = "" + winOddsValue + "-1"; // Gets oddsValue and displays in table in the form of int-1
             String c7 = "" + placeOddsValue + "-1";
             String c8 = "" + showOddsValue + "-1";
             System.out.println("+-------------------------+-----+-----+-----+-----+-----+-----+-----+");
@@ -135,7 +135,6 @@ public class Race {
 //call bet display. Display odds and display how much they won
         HorseRacingHelper.stopMusic();
     }
-    // Other methods for simulating the race, calculating winners, etc., can be added as needed
 
     /* Determines how quickly a horse moves across the race track.
     *  Influences are the horse's rating on the current race terrain, preferred length reletive to the race length.
@@ -151,12 +150,11 @@ public class Race {
             d += horse.getDirtRating() / 2;
         else if (raceSurface.equalsIgnoreCase("mud"))
             d += horse.getMudRating() / 2;
-        // this.raceSurface
        return (int)((Math.random() * d)+1);
     }
 
 
-    public int winOdds(Horse horse) { 
+    public int winOdds(Horse horse) { //Calculations for win odds
         
         int c = (int)(7 - Math.abs(horse.getPreferredLength() - this.raceLength));
 
@@ -167,27 +165,27 @@ public class Race {
         else if (raceSurface.equalsIgnoreCase("mud"))
             c += horse.getMudRating() * 10 / 2;
         double total =  (c + (horse.getGrassRating() * 10 + horse.getDirtRating() * 10 + horse.getMudRating() * 10) / 12 ); //Multiplying ratings by 10 to properly do calculation
-        double winOddsValue =  Math.round((2 * Math.pow(100 / total, 2)) - 1); //Calculating win odds
+        double winOddsValue =  Math.round((2 * Math.pow(100 / total, 2)) - 1); // Equation found by trying different numbers from the example odds 
         if (winOddsValue < 1.0){ 
             winOddsValue = 1.0;
-            }
-        return (int) winOddsValue;
+            } // Making sure the odds aren't 0 or less
+        return (int) winOddsValue; // Returning the odds as an int, so it will be in the form of int - 1
     }
 
     
-    public int placeOdds (Horse horse){
+    public int placeOdds (Horse horse){ // Calculations for place odds
     int winoddsValue = winOdds(horse);
-    double placeOddsValue = (winoddsValue * 0.8);
-    if (placeOddsValue < 1.0){ //Making sure the odds aren't 0 or less
+    double placeOddsValue = (winoddsValue * 0.8); // Calculating placeOdds by getting 80% of winOdds
+    if (placeOddsValue < 1.0){ 
     placeOddsValue = 1.0;
     }
     return (int) placeOddsValue;
     }
     
 
-    public int showOdds (Horse horse){
+    public int showOdds (Horse horse){ // Calculations for show odds
     int winoddsValue = winOdds(horse);
-    double showOddsValue = (winoddsValue * 0.6);
+    double showOddsValue = (winoddsValue * 0.6); // Calculating showOdds by getting 60% of winOdds 
     if (showOddsValue < 1.0){ 
         showOddsValue = 1.0;
     }
@@ -200,23 +198,24 @@ public class Race {
             horse.resetCurrenPosition();
         }
     }
+//Calculates how much money the user earns from their bets, based on if they chose win, place or show
+// It then adds the money earned to wallet, then returns it to the placeBets method to be updated 
 
-
-    public double betResult(double wallet){
-        Bet userBet = this.userBet;
-     for (Horse horse : getHorses()){
-        if (horse.getNumber() == userBet.getSelectedHorse() && results.indexOf(horse) == 0 && userBet.getBetType() == 1){
+    public double betAmount(double wallet){ 
+        Bet userBet = this.userBet; //New bet from bet class
+     for (Horse horse : getHorses()){ // Gets the list of horses
+        if (horse.getNumber() == userBet.getSelectedHorse() && results.indexOf(horse) == 0 && userBet.getBetType() == 1){//Checks if the horse the user selected has won and if the user has selected winodds
         int winOddsValue = winOdds(horse);
-        wallet += winOddsValue * userBet.getAmount();
-         } else if (horse.getNumber() == userBet.getSelectedHorse() && results.indexOf(horse) <= 1 && userBet.getBetType() == 2){
+        wallet += winOddsValue * userBet.getAmount();// If the following is true, adds the winOdds x  amount the user bet to the wallet
+         } else if (horse.getNumber() == userBet.getSelectedHorse() && results.indexOf(horse) <= 1 && userBet.getBetType() == 2){ // Checks if the horse user selected placed first or second and has selected placeodds
             int placeOddsValue = placeOdds(horse);
-            wallet += placeOddsValue * userBet.getAmount();
-         } else if (horse.getNumber() == userBet.getSelectedHorse() && results.indexOf(horse) <= 2 && userBet.getBetType() == 3){
-            int showOddsValue = showOdds(horse);
-            wallet += showOddsValue * userBet.getAmount();
+            wallet += placeOddsValue * userBet.getAmount(); // If the following is true, adds the placeOdds x  amount the user bet to the wallet
+         } else if (horse.getNumber() == userBet.getSelectedHorse() && results.indexOf(horse) <= 2 && userBet.getBetType() == 3){ // Checks if horse user selected was first, second or third, and user selected showodds
+            int showOddsValue = showOdds(horse); 
+            wallet += showOddsValue * userBet.getAmount();// If the following is true, adds showodds x amount the user bet to the wallet
         }
       } 
-    return wallet;
+    return wallet; // returns wallet to placeBets method
     }
 
     /* placeBets method interacts with the user to determine the bet type, horse, and amount of money they would like to place.  
@@ -316,7 +315,6 @@ public class Race {
                     wallet-=betAmount;
                     System.out.printf("Your wallet balance is now $%.2f\n\n" , wallet);
                     wallet = ((int)(wallet * 100)) / 100.00; // Forcing all decimals to be 2 decimal places.
-                    //in.nextLine();
                     continueToGetBet = false; // We now have validated user input for bet type, horse choice, and bet amount.
                 }
             }
