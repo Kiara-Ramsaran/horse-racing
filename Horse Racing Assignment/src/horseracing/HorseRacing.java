@@ -42,13 +42,22 @@ public class HorseRacing {
                 wallet = askWalletAmount(); 
                 askedWalletAmount = true;
             }
-            // placeBets collects and validates betting input from the user.
+            // placeBets() collects and validates betting input from the user.
             wallet = race.placeBets(wallet);
             race.startRace();
             System.out.println("Race is Over");
-            // betResult calculates the result of the bet
-            wallet = race.betAmount(wallet);
-            System.out.printf("Curent wallet amount is $%.2f.\n", wallet);
+            System.out.println();
+            // betAmount() calculates the result of the bet
+            double walletAfterRace = race.betAmount(wallet);
+            // Checks if the user won their bet. Wallet amount after the race will be more than the wallet amount before the race.
+            if (walletAfterRace > wallet){
+                System.out.printf("Congratulations, you won $%.2f.\n", (walletAfterRace - wallet));  
+                wallet = walletAfterRace; // Updating actual wallet with the value that includes winnings.
+            }
+            else{
+                System.out.println("Sorry, you lost.");
+            }
+            System.out.printf("Curent wallet amount is $%.2f.\n\n", wallet);
             gameOver = playAgain(in);
         }
 
